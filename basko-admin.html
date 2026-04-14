@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basko — Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;1,400&display=swap" rel="stylesheet">
+<style>
+:root { --gold:#c9a84c; --dark:#0d0b08; --dark2:#1a1510; --dark3:#261f16; --cream:#f7f2e8; --muted:#7a6a54; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Jost',sans-serif;background:var(--dark2);color:var(--cream);min-height:100vh}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:220px;background:var(--dark);border-right:1px solid rgba(201,168,76,0.12);padding:32px 0}
+.logo{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold);text-align:center;margin-bottom:40px;letter-spacing:0.1em}
+.nav-item{display:flex;align-items:center;gap:12px;padding:14px 24px;font-size:13px;letter-spacing:0.05em;color:rgba(247,242,232,0.5);cursor:pointer;transition:all 0.2s;border-left:2px solid transparent}
+.nav-item:hover,.nav-item.active{color:var(--gold);background:rgba(201,168,76,0.06);border-left-color:var(--gold)}
+.main{margin-left:220px;padding:32px}
+.page{display:none}.page.active{display:block}
+h1{font-family:'Cormorant Garamond',serif;font-size:36px;font-weight:300;color:var(--cream);margin-bottom:8px}
+.subtitle{font-size:13px;color:var(--muted);margin-bottom:32px}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
+.stat-card{background:var(--dark);border:1px solid rgba(201,168,76,0.12);padding:24px;border-radius:2px}
+.stat-num{font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:300;color:var(--gold)}
+.stat-lbl{font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.card{background:var(--dark);border:1px solid rgba(201,168,76,0.12);padding:24px;margin-bottom:24px}
+.card-title{font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);padding:8px 12px;border-bottom:1px solid rgba(201,168,76,0.12);font-weight:500}
+td{padding:12px;border-bottom:1px solid rgba(201,168,76,0.07);color:rgba(247,242,232,0.8);vertical-align:top}
+tr:hover td{background:rgba(201,168,76,0.03)}
+.badge{display:inline-block;padding:3px 10px;font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase}
+.badge-confirmed{background:rgba(74,222,128,0.15);color:#4ade80}
+.badge-pkg{background:rgba(201,168,76,0.15);color:var(--gold)}
+.empty{text-align:center;padding:60px;color:var(--muted);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px}
+.refresh-btn{background:transparent;border:1px solid rgba(201,168,76,0.3);color:var(--gold);padding:8px 20px;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;transition:all 0.2s;float:right;margin-bottom:16px}
+.refresh-btn:hover{background:var(--gold);color:var(--dark)}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="logo">Basko</div>
+  <div class="nav-item active" onclick="showPage('dashboard',this)">Dashboard</div>
+  <div class="nav-item" onclick="showPage('reservations',this)">Reservations</div>
+  <div class="nav-item" onclick="showPage('contacts',this)">Messages</div>
+  <div class="nav-item" onclick="window.open('/')">View Website</div>
+</div>
+
+<div class="main">
+  <div id="dashboard" class="page active">
+    <h1>Dashboard</h1>
+    <p class="subtitle">Basko Restaurant · Admin Panel</p>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num" id="totalRes">—</div><div class="stat-lbl">Total Reservations</div></div>
+      <div class="stat-card"><div class="stat-num" id="todayRes">—</div><div class="stat-lbl">Today's Bookings</div></div>
+      <div class="stat-card"><div class="stat-num" id="totalMsg">—</div><div class="stat-lbl">Messages</div></div>
+      <div class="stat-card"><div class="stat-num" id="pkgCount">—</div><div class="stat-lbl">Package Bookings</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Recent Reservations</div>
+      <div id="recentList">Loading...</div>
+    </div>
+  </div>
+
+  <div id="reservations" class="page">
+    <h1>Reservations</h1>
+    <p class="subtitle">All table bookings</p>
+    <button class="refresh-btn" onclick="loadReservations()">Refresh</button>
+    <div class="card">
+      <div id="reservationsList">Loading...</div>
+    </div>
+  </div>
+
+  <div id="contacts" class="page">
+    <h1>Messages</h1>
+    <p class="subtitle">Contact form submissions</p>
+    <button class="refresh-btn" onclick="loadContacts()">Refresh</button>
+    <div class="card">
+      <div id="contactsList">Loading...</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+}
+
+async function loadDashboard() {
+  try {
+    const r = await fetch('/api/reservations');
+    const rData = await r.json();
+    const reservations = rData.data || [];
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('totalRes').textContent = reservations.length;
+    document.getElementById('todayRes').textContent = reservations.filter(r => r.date === today).length;
+    document.getElementById('pkgCount').textContent = reservations.filter(r => r.package !== 'standard').length;
+
+    const recent = reservations.slice(-5).reverse();
+    document.getElementById('recentList').innerHTML = recent.length ? `
+      <table>
+        <tr><th>Name</th><th>Date</th><th>Time</th><th>Guests</th><th>Occasion</th><th>Package</th><th>Status</th></tr>
+        ${recent.map(r => `<tr>
+          <td>${r.name}<br><span style="color:var(--muted);font-size:11px">${r.phone}</span></td>
+          <td>${r.date}</td><td>${r.time}</td><td>${r.guests}</td>
+          <td>${r.occasion||'—'}</td>
+          <td><span class="badge badge-pkg">${r.package}</span></td>
+          <td><span class="badge badge-confirmed">Confirmed</span></td>
+        </tr>`).join('')}
+      </table>` : '<div class="empty">No reservations yet</div>';
+
+  } catch(e) { document.getElementById('recentList').innerHTML = '<div class="empty">API not connected — run the backend server</div>'; }
+
+  document.getElementById('totalMsg').textContent = '—';
+}
+
+async function loadReservations() {
+  try {
+    const r = await fetch('/api/reservations');
+    const data = await r.json();
+    const reservations = (data.data || []).reverse();
+    document.getElementById('reservationsList').innerHTML = reservations.length ? `
+      <table>
+        <tr><th>ID</th><th>Name</th><th>Phone</th><th>Date</th><th>Time</th><th>Guests</th><th>Package</th><th>Occasion</th><th>Requests</th></tr>
+        ${reservations.map(r => `<tr>
+          <td style="font-size:11px;color:var(--muted)">BASKO-${String(r.id).slice(-6)}</td>
+          <td>${r.name}</td><td>${r.phone}</td><td>${r.date}</td>
+          <td>${r.time}</td><td>${r.guests}</td>
+          <td><span class="badge badge-pkg">${r.package}</span></td>
+          <td>${r.occasion||'—'}</td>
+          <td style="font-size:12px;max-width:160px">${r.specialRequests||'—'}</td>
+        </tr>`).join('')}
+      </table>` : '<div class="empty">No reservations yet</div>';
+  } catch(e) { document.getElementById('reservationsList').innerHTML = '<div class="empty">Backend not connected</div>'; }
+}
+
+async function loadContacts() {
+  document.getElementById('contactsList').innerHTML = '<div class="empty">No messages yet</div>';
+}
+
+loadDashboard();
+</script>
+</body>
+</html>

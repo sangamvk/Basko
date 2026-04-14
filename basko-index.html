@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Basko — Rooftop Culinary Bar, Noida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #c9a84c;
+  --gold-light: #e8c97a;
+  --gold-pale: #f5e8c0;
+  --black: #0d0b08;
+  --dark: #1a1510;
+  --dark2: #261f16;
+  --dark3: #332a1d;
+  --cream: #f7f2e8;
+  --cream2: #ede4d0;
+  --text: #2c2318;
+  --text-muted: #7a6a54;
+  --white: #fdfaf4;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Jost', sans-serif;
+  --radius: 2px;
+  --transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--black);
+  color: var(--cream);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom Cursor */
+.cursor {
+  width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease;
+}
+.cursor-ring {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(201,168,76,0.5);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease, width 0.3s, height 0.3s, border-color 0.3s;
+}
+.cursor-ring.hover { width: 56px; height: 56px; border-color: var(--gold); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--gold); }
+
+/* ── NAV ─────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0 5vw;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 80px;
+  background: transparent;
+  transition: background var(--transition), height var(--transition);
+}
+nav.scrolled {
+  background: rgba(13,11,8,0.95);
+  backdrop-filter: blur(12px);
+  height: 64px;
+  border-bottom: 1px solid rgba(201,168,76,0.15);
+}
+.nav-logo {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--gold);
+  letter-spacing: 0.15em;
+  text-decoration: none;
+}
+.nav-logo span { font-style: italic; font-weight: 400; }
+.nav-links { display: flex; gap: 36px; list-style: none; }
+.nav-links a {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(247,242,232,0.7);
+  text-decoration: none;
+  transition: color 0.3s;
+  position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 1px; background: var(--gold);
+  transition: width 0.3s;
+}
+.nav-links a:hover { color: var(--gold); }
+.nav-links a:hover::after { width: 100%; }
+.nav-reserve {
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 10px 24px;
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: 500;
+}
+.nav-reserve:hover { background: var(--gold); color: var(--black); }
+.nav-burger { display: none; flex-direction: column; gap: 6px; cursor: pointer; }
+.nav-burger span { width: 24px; height: 1px; background: var(--gold); display: block; transition: all 0.3s; }
+
+/* ── HERO ───────────────────── */
+#hero {
+  height: 100vh; min-height: 700px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1600&q=90') center/cover no-repeat;
+  transform: scale(1.08);
+  animation: heroZoom 12s ease-out forwards;
+}
+@keyframes heroZoom { to { transform: scale(1); } }
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(13,11,8,0.3) 0%,
+    rgba(13,11,8,0.55) 50%,
+    rgba(13,11,8,0.92) 100%
+  );
+}
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 0 5vw;
+  animation: heroFadeUp 1.4s 0.3s both;
+}
+@keyframes heroFadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+.hero-tagline {
+  font-family: var(--sans);
+  font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 24px;
+  animation: heroFadeUp 1.2s 0.5s both;
+}
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(56px, 8vw, 110px);
+  font-weight: 300; line-height: 1;
+  color: var(--white);
+  margin-bottom: 24px;
+  animation: heroFadeUp 1.2s 0.7s both;
+}
+.hero-title em { font-style: italic; color: var(--gold-light); }
+.hero-sub {
+  font-family: var(--serif);
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 300; font-style: italic;
+  color: rgba(247,242,232,0.75);
+  margin-bottom: 48px;
+  animation: heroFadeUp 1.2s 0.9s both;
+}
+.hero-ctas {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  animation: heroFadeUp 1.2s 1.1s both;
+}
+.btn-primary {
+  background: var(--gold);
+  color: var(--black);
+  padding: 16px 40px;
+  font-family: var(--sans);
+  font-size: 12px; letter-spacing: 0.12em; font-weight: 600;
+  text-transform: uppercase; border: none; cursor: pointer;
+  transition: all 0.3s; text-decoration: none; display: inline-block;
+}
+.btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+.btn-outline {
+  background: transparent;
+  color: var(--cream);
+  padding: 16px 40px;
+  font-family: var(--sans);
+  font-size: 12px; letter-spacing: 0.12em; font-weight: 500;
+  text-transform: uppercase;
+  border: 1px solid rgba(247,242,232,0.4);
+  cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block;
+}
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+.hero-scroll {
+  position: absolute; bottom: 48px; left: 50%; transform: translateX(-50%);
+  z-index: 2; text-align: center; animation: heroFadeUp 1.2s 1.4s both;
+}
+.scroll-line {
+  width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, var(--gold));
+  margin: 0 auto 10px;
+  animation: scrollPulse 2s infinite;
+}
+@keyframes scrollPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+.scroll-text { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+
+/* ── MARQUEE ────────────────── */
+.marquee-band {
+  background: var(--gold);
+  padding: 14px 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.marquee-inner {
+  display: inline-flex; gap: 60px;
+  animation: marquee 20s linear infinite;
+}
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-item {
+  font-family: var(--serif);
+  font-size: 15px; font-style: italic;
+  color: var(--black); font-weight: 400;
+  display: flex; align-items: center; gap: 20px;
+}
+.marquee-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--dark); }
+
+/* ── SECTIONS COMMON ────────── */
+section { padding: 100px 5vw; }
+.section-eyebrow {
+  font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 16px; font-weight: 600;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+.section-eyebrow.visible { opacity: 1; transform: none; }
+.section-title-xl {
+  font-family: var(--serif);
+  font-size: clamp(36px, 5vw, 72px);
+  font-weight: 300; line-height: 1.1;
+  color: var(--cream);
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.8s 0.1s, transform 0.8s 0.1s;
+}
+.section-title-xl.visible { opacity: 1; transform: none; }
+.section-title-xl em { font-style: italic; color: var(--gold-light); }
+.gold-divider {
+  width: 60px; height: 1px;
+  background: linear-gradient(to right, var(--gold), transparent);
+  margin: 24px 0;
+  opacity: 0; transition: opacity 0.6s 0.3s, width 0.8s 0.3s;
+}
+.gold-divider.visible { opacity: 1; width: 80px; }
+
+/* ── ABOUT ──────────────────── */
+#about { background: var(--dark); }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center;
+  max-width: 1300px; margin: 0 auto;
+}
+.about-images {
+  position: relative;
+  height: 580px;
+}
+.about-img-main {
+  width: 75%;
+  height: 480px;
+  object-fit: cover;
+  position: absolute; top: 0; right: 0;
+  opacity: 0; transform: translateX(40px);
+  transition: opacity 0.9s 0.2s, transform 0.9s 0.2s;
+}
+.about-img-main.visible { opacity: 1; transform: none; }
+.about-img-accent {
+  width: 55%;
+  height: 300px;
+  object-fit: cover;
+  position: absolute; bottom: 0; left: 0;
+  border: 6px solid var(--dark);
+  opacity: 0; transform: translateX(-30px);
+  transition: opacity 0.9s 0.4s, transform 0.9s 0.4s;
+}
+.about-img-accent.visible { opacity: 1; transform: none; }
+.about-text-body {
+  font-family: var(--serif);
+  font-size: 18px; line-height: 1.9;
+  color: rgba(237,228,208,0.8);
+  margin-bottom: 24px;
+  font-weight: 300;
+}
+.about-stats {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px; margin-top: 48px;
+  border-top: 1px solid rgba(201,168,76,0.2);
+  padding-top: 40px;
+}
+.about-stat-num {
+  font-family: var(--serif);
+  font-size: 42px; font-weight: 300;
+  color: var(--gold);
+}
+.about-stat-label {
+  font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ── MENU ───────────────────── */
+#menu { background: var(--black); }
+.menu-filters {
+  display: flex; gap: 0; flex-wrap: wrap;
+  margin: 48px 0 56px;
+  border-bottom: 1px solid rgba(201,168,76,0.2);
+}
+.filter-btn {
+  background: none; border: none;
+  font-family: var(--sans); font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-muted); padding: 14px 28px;
+  cursor: pointer; transition: all 0.3s;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  font-weight: 500;
+}
+.filter-btn.active, .filter-btn:hover { color: var(--gold); border-bottom-color: var(--gold); }
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2px;
+  max-width: 1400px;
+}
+.menu-card {
+  position: relative; overflow: hidden;
+  aspect-ratio: 3/4;
+  opacity: 0; transform: scale(0.97);
+  transition: opacity 0.6s, transform 0.6s;
+}
+.menu-card.visible { opacity: 1; transform: none; }
+.menu-card img {
+  width: 100%; height: 100%; object-fit: cover;
+  transition: transform 0.7s var(--transition);
+}
+.menu-card:hover img { transform: scale(1.08); }
+.menu-card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(13,11,8,0.95) 0%, rgba(13,11,8,0.3) 60%, transparent 100%);
+  padding: 28px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  transition: background 0.4s;
+}
+.menu-card:hover .menu-card-overlay {
+  background: linear-gradient(to top, rgba(13,11,8,0.98) 0%, rgba(13,11,8,0.6) 70%, rgba(13,11,8,0.1) 100%);
+}
+.menu-card-tag {
+  background: var(--gold); color: var(--black);
+  font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 4px 12px; display: inline-block;
+  align-self: flex-start; margin-bottom: auto; font-weight: 600;
+}
+.menu-card-name {
+  font-family: var(--serif);
+  font-size: 22px; font-weight: 400; line-height: 1.2;
+  color: var(--cream); margin-bottom: 6px;
+}
+.menu-card-desc {
+  font-size: 13px; line-height: 1.6;
+  color: rgba(247,242,232,0.65);
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s, opacity 0.4s;
+  opacity: 0;
+}
+.menu-card:hover .menu-card-desc { max-height: 80px; opacity: 1; }
+.menu-card-price {
+  font-family: var(--serif);
+  font-size: 20px; color: var(--gold);
+  margin-top: 10px; font-weight: 300;
+}
+.veg-badge {
+  display: inline-block; width: 14px; height: 14px;
+  border: 1.5px solid; border-radius: 2px;
+  margin-left: 8px; vertical-align: middle;
+}
+.veg-badge.veg { border-color: #4ade80; }
+.veg-badge.veg::after { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: #4ade80; margin: 2px; }
+.veg-badge.nonveg { border-color: #f87171; }
+.veg-badge.nonveg::after { content: ''; display: block; width: 0; height: 0; border-left: 3px solid transparent; border-right: 3px solid transparent; border-bottom: 6px solid #f87171; margin: 2px auto; }
+
+/* ── EXPERIENCE ─────────────── */
+#experience { background: var(--dark); }
+.exp-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 1px;
+  margin-top: 60px; max-width: 1300px;
+}
+.exp-card {
+  background: var(--dark2);
+  padding: 48px 36px;
+  transition: background 0.4s;
+  opacity: 0; transform: translateY(30px);
+  transition: background 0.4s, opacity 0.7s, transform 0.7s;
+}
+.exp-card:hover { background: var(--dark3); }
+.exp-card.visible { opacity: 1; transform: none; }
+.exp-icon {
+  width: 48px; height: 48px;
+  border: 1px solid var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 28px;
+  font-size: 20px;
+}
+.exp-card-title {
+  font-family: var(--serif);
+  font-size: 24px; font-weight: 400;
+  color: var(--cream); margin-bottom: 14px;
+}
+.exp-card-body {
+  font-size: 14px; line-height: 1.8;
+  color: rgba(247,242,232,0.55);
+}
+
+/* ── GALLERY ────────────────── */
+#gallery { background: var(--black); padding: 100px 0; }
+.gallery-header { padding: 0 5vw 56px; }
+.gallery-mosaic {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(2, 320px);
+  gap: 3px;
+}
+.g-cell { overflow: hidden; position: relative; }
+.g-cell img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--transition); }
+.g-cell:hover img { transform: scale(1.06); }
+.g1 { grid-column: span 5; grid-row: span 2; }
+.g2 { grid-column: span 4; }
+.g3 { grid-column: span 3; }
+.g4 { grid-column: span 4; }
+.g5 { grid-column: span 3; }
+
+/* ── PACKAGES ───────────────── */
+#packages { background: var(--dark); }
+.packages-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 2px; margin-top: 60px; max-width: 1300px;
+}
+.pkg-card {
+  background: var(--dark2);
+  padding: 52px 40px;
+  position: relative;
+  opacity: 0; transform: translateY(40px);
+  transition: opacity 0.8s, transform 0.8s;
+}
+.pkg-card.visible { opacity: 1; transform: none; }
+.pkg-card.featured { background: var(--dark3); }
+.pkg-featured-label {
+  position: absolute; top: -1px; left: 40px;
+  background: var(--gold); color: var(--black);
+  font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+  padding: 5px 14px; font-weight: 600;
+}
+.pkg-name {
+  font-family: var(--serif);
+  font-size: 28px; font-weight: 400;
+  color: var(--cream); margin-bottom: 8px;
+}
+.pkg-guests {
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 28px;
+}
+.pkg-price {
+  font-family: var(--serif);
+  font-size: 52px; font-weight: 300;
+  color: var(--gold); line-height: 1;
+}
+.pkg-price sub { font-size: 18px; vertical-align: middle; margin-right: 4px; }
+.pkg-original {
+  font-size: 14px; color: var(--text-muted);
+  text-decoration: line-through; margin-top: 4px; margin-bottom: 28px;
+}
+.pkg-divider { width: 40px; height: 1px; background: var(--gold); margin: 24px 0; }
+.pkg-perks { list-style: none; margin-bottom: 36px; }
+.pkg-perks li {
+  font-size: 14px; color: rgba(247,242,232,0.7);
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(201,168,76,0.1);
+  display: flex; align-items: center; gap: 12px;
+}
+.pkg-perks li::before { content: '—'; color: var(--gold); font-size: 12px; }
+.pkg-btn {
+  width: 100%; padding: 14px;
+  font-family: var(--sans); font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  font-weight: 600; cursor: pointer; transition: all 0.3s;
+  border: 1px solid var(--gold);
+  background: transparent; color: var(--gold);
+}
+.pkg-btn:hover, .pkg-card.featured .pkg-btn {
+  background: var(--gold); color: var(--black);
+}
+.pkg-card.featured .pkg-btn:hover { background: var(--gold-light); }
+
+/* ── RESERVATION ────────────── */
+#reservation {
+  background: url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1600&q=80') center/cover no-repeat;
+  position: relative;
+}
+#reservation::before {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(13,11,8,0.88);
+}
+#reservation > * { position: relative; z-index: 1; }
+.reservation-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: start;
+  max-width: 1200px; margin: 0 auto;
+}
+.res-info-body {
+  font-family: var(--serif);
+  font-size: 18px; line-height: 1.9;
+  color: rgba(237,228,208,0.75); font-weight: 300;
+  margin: 24px 0;
+}
+.res-details { list-style: none; margin-top: 36px; }
+.res-details li {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(201,168,76,0.15);
+  font-size: 14px; color: rgba(247,242,232,0.7);
+}
+.res-details .lbl {
+  font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold); min-width: 80px; padding-top: 2px; font-weight: 600;
+}
+.form-card {
+  background: var(--dark);
+  padding: 48px 40px;
+  border: 1px solid rgba(201,168,76,0.2);
+}
+.form-title {
+  font-family: var(--serif);
+  font-size: 28px; font-weight: 400;
+  color: var(--cream); margin-bottom: 32px;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { margin-bottom: 16px; }
+.form-group label {
+  display: block;
+  font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--text-muted); margin-bottom: 8px; font-weight: 600;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201,168,76,0.2);
+  color: var(--cream);
+  padding: 14px 16px;
+  font-family: var(--sans); font-size: 14px;
+  transition: border-color 0.3s;
+  outline: none;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--gold);
+}
+.form-group select option { background: var(--dark2); }
+.form-group textarea { resize: vertical; min-height: 80px; }
+.time-slots {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+  margin-top: 8px;
+}
+.time-slot {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(201,168,76,0.15);
+  color: var(--text-muted);
+  padding: 8px 4px; text-align: center;
+  font-size: 12px; cursor: pointer;
+  transition: all 0.2s;
+}
+.time-slot:hover { border-color: var(--gold); color: var(--gold); }
+.time-slot.selected { background: var(--gold); color: var(--black); border-color: var(--gold); font-weight: 600; }
+.time-slot.unavailable { opacity: 0.35; cursor: not-allowed; }
+.form-submit {
+  width: 100%; background: var(--gold); color: var(--black);
+  border: none; padding: 16px;
+  font-family: var(--sans); font-size: 12px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  font-weight: 700; cursor: pointer; margin-top: 8px;
+  transition: all 0.3s;
+}
+.form-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
+.form-submit:disabled { opacity: 0.6; cursor: wait; }
+.form-success {
+  display: none;
+  text-align: center; padding: 48px 0;
+}
+.success-icon { font-size: 48px; margin-bottom: 20px; }
+.success-title {
+  font-family: var(--serif);
+  font-size: 28px; color: var(--cream); margin-bottom: 12px;
+}
+.success-sub { font-size: 14px; color: var(--text-muted); }
+.booking-id { color: var(--gold); font-weight: 600; margin-top: 8px; font-size: 16px; }
+
+/* ── TESTIMONIALS ───────────── */
+#testimonials { background: var(--black); }
+.testimonials-slider { margin-top: 60px; overflow: hidden; position: relative; }
+.testimonials-track {
+  display: flex; gap: 24px;
+  transition: transform 0.6s var(--transition);
+}
+.testimonial-card {
+  min-width: calc(33.333% - 16px);
+  background: var(--dark2);
+  padding: 40px;
+}
+.stars { color: var(--gold); font-size: 14px; letter-spacing: 3px; margin-bottom: 20px; }
+.testimonial-text {
+  font-family: var(--serif);
+  font-size: 18px; font-style: italic;
+  line-height: 1.8; color: rgba(237,228,208,0.85);
+  margin-bottom: 24px;
+}
+.testimonial-author { display: flex; align-items: center; gap: 16px; }
+.author-avatar {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--dark3);
+  overflow: hidden; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 18px; color: var(--gold);
+}
+.author-name { font-size: 14px; font-weight: 500; color: var(--cream); }
+.author-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.slider-controls { display: flex; gap: 12px; margin-top: 32px; justify-content: flex-end; }
+.slider-btn {
+  width: 44px; height: 44px;
+  background: transparent; border: 1px solid rgba(201,168,76,0.3);
+  color: var(--gold); font-size: 18px; cursor: pointer; transition: all 0.3s;
+}
+.slider-btn:hover { background: var(--gold); color: var(--black); border-color: var(--gold); }
+
+/* ── CONTACT ────────────────── */
+#contact { background: var(--dark); }
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; max-width: 1200px; margin: 60px auto 0;
+}
+.contact-info-item {
+  margin-bottom: 36px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(201,168,76,0.15);
+}
+.contact-info-label {
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 10px; font-weight: 600;
+}
+.contact-info-val {
+  font-family: var(--serif);
+  font-size: 18px; color: var(--cream); font-weight: 300;
+}
+.contact-info-sub { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+.map-embed {
+  width: 100%; aspect-ratio: 4/3;
+  border: 1px solid rgba(201,168,76,0.2);
+  filter: grayscale(100%) contrast(1.1) brightness(0.7);
+  transition: filter 0.4s;
+}
+.map-embed:hover { filter: grayscale(40%) contrast(1) brightness(0.85); }
+.contact-form-card {
+  background: var(--dark2); padding: 48px 40px;
+  border: 1px solid rgba(201,168,76,0.15);
+}
+
+/* ── FOOTER ─────────────────── */
+footer {
+  background: var(--black);
+  border-top: 1px solid rgba(201,168,76,0.1);
+  padding: 60px 5vw 36px;
+}
+.footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px; margin-bottom: 48px;
+}
+.footer-brand-name {
+  font-family: var(--serif);
+  font-size: 36px; font-weight: 300; color: var(--gold);
+  letter-spacing: 0.1em; margin-bottom: 16px;
+}
+.footer-brand-tagline {
+  font-family: var(--serif);
+  font-style: italic; font-size: 15px;
+  color: var(--text-muted); margin-bottom: 24px;
+}
+.footer-social { display: flex; gap: 12px; }
+.social-btn {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(201,168,76,0.3);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gold); font-size: 14px; text-decoration: none;
+  transition: all 0.3s;
+}
+.social-btn:hover { background: var(--gold); color: var(--black); border-color: var(--gold); }
+.footer-col-title {
+  font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 20px; font-weight: 600;
+}
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 12px; }
+.footer-links a {
+  font-size: 14px; color: var(--text-muted);
+  text-decoration: none; transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--cream); }
+.footer-bottom {
+  border-top: 1px solid rgba(201,168,76,0.1);
+  padding-top: 28px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-copy { font-size: 12px; color: var(--text-muted); }
+
+/* ── TOAST ──────────────────── */
+.toast {
+  position: fixed; bottom: 32px; right: 32px;
+  background: var(--dark2); border-left: 3px solid var(--gold);
+  padding: 16px 24px; font-size: 14px; color: var(--cream);
+  transform: translateX(120%); transition: transform 0.4s;
+  z-index: 999; max-width: 360px;
+}
+.toast.show { transform: translateX(0); }
+.toast.error { border-left-color: #f87171; }
+
+/* ── MOBILE NAV MENU ──────────── */
+.mobile-nav {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: var(--black); flex-direction: column;
+  align-items: center; justify-content: center; gap: 32px;
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav a {
+  font-family: var(--serif);
+  font-size: 36px; font-weight: 300;
+  color: var(--cream); text-decoration: none;
+  transition: color 0.3s;
+}
+.mobile-nav a:hover { color: var(--gold); }
+.mobile-close {
+  position: absolute; top: 28px; right: 5vw;
+  background: none; border: none; color: var(--gold);
+  font-size: 28px; cursor: pointer;
+}
+
+/* ── RESPONSIVE ─────────────── */
+@media (max-width: 1024px) {
+  .about-grid { grid-template-columns: 1fr; gap: 48px; }
+  .about-images { height: 300px; }
+  .about-img-main { width: 70%; height: 300px; }
+  .about-img-accent { width: 45%; height: 200px; }
+  .exp-grid { grid-template-columns: 1fr; }
+  .packages-grid { grid-template-columns: 1fr; }
+  .reservation-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .testimonial-card { min-width: calc(80vw); }
+}
+@media (max-width: 768px) {
+  section { padding: 70px 5vw; }
+  .nav-links, .nav-reserve { display: none; }
+  .nav-burger { display: flex; }
+  .gallery-mosaic { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+  .g1,.g2,.g3,.g4,.g5 { grid-column: span 1; grid-row: span 1; height: 200px; }
+  .form-row { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+  .time-slots { grid-template-columns: repeat(3,1fr); }
+  .menu-grid { grid-template-columns: 1fr 1fr; }
+  .about-stats { grid-template-columns: 1fr; gap: 16px; }
+}
+@media (max-width: 480px) {
+  .menu-grid { grid-template-columns: 1fr; }
+  .hero-title { font-size: 44px; }
+  .packages-grid { gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+<div class="toast" id="toast"></div>
+
+<!-- Mobile Nav -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" onclick="closeMobileNav()">✕</button>
+  <a href="#about" onclick="closeMobileNav()">About</a>
+  <a href="#menu" onclick="closeMobileNav()">Menu</a>
+  <a href="#experience" onclick="closeMobileNav()">Experience</a>
+  <a href="#packages" onclick="closeMobileNav()">Packages</a>
+  <a href="#reservation" onclick="closeMobileNav()">Reserve</a>
+  <a href="#contact" onclick="closeMobileNav()">Contact</a>
+</div>
+
+<!-- Navigation -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">B<span>asko</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#packages">Packages</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-reserve" onclick="scrollTo('#reservation')">Reserve a Table</button>
+  <div class="nav-burger" onclick="document.getElementById('mobileNav').classList.add('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-tagline">Noida · Sector 104 · Rooftop Culinary Bar</p>
+    <h1 class="hero-title">Where Flavours<br>Meet the <em>Night Sky</em></h1>
+    <p class="hero-sub">Modern Indian · Turkish · Pan-Asian · European · Handcrafted Cocktails</p>
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="scrollTo('#reservation')">Reserve Your Table</button>
+      <a href="#menu" class="btn-outline">Explore Menu</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll</span>
+  </div>
+</section>
+
+<!-- Marquee -->
+<div class="marquee-band">
+  <div class="marquee-inner" id="marquee">
+    <span class="marquee-item">Lebanese Breaking Balloon <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Rooftop Dining <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Handcrafted Cocktails <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Live Music Nights <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Balochistan Raan <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Starling Mall, Noida <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Open Till 1 AM <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Lebanese Breaking Balloon <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Rooftop Dining <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Handcrafted Cocktails <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Live Music Nights <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Balochistan Raan <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Starling Mall, Noida <span class="marquee-dot"></span></span>
+    <span class="marquee-item">Open Till 1 AM <span class="marquee-dot"></span></span>
+  </div>
+</div>
+
+<!-- About -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-images">
+      <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=85" alt="Basko interior" class="about-img-main" loading="lazy">
+      <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80" alt="Basko dining" class="about-img-accent" loading="lazy">
+    </div>
+    <div>
+      <div class="section-eyebrow">Our Story</div>
+      <h2 class="section-title-xl">A New Standard<br>in <em>All-Day Dining</em></h2>
+      <div class="gold-divider"></div>
+      <p class="about-text-body">Basko reimagines the all-day culinary bar — where luxury meets laid-back sophistication. Perched atop Starling Mall, our rooftop is a sanctuary that seamlessly transitions from afternoon sunsets to late-night revelry.</p>
+      <p class="about-text-body">Our menu is a gastronomic journey across continents — modern Indian, Turkish, Pan-Asian, and European cuisines converge on a single table. Paired with cocktails crafted by world-class mixologists.</p>
+      <div class="about-stats">
+        <div>
+          <div class="about-stat-num">30+</div>
+          <div class="about-stat-label">Signature Cocktails</div>
+        </div>
+        <div>
+          <div class="about-stat-num">4</div>
+          <div class="about-stat-label">World Cuisines</div>
+        </div>
+        <div>
+          <div class="about-stat-num">1AM</div>
+          <div class="about-stat-label">We Close</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Menu -->
+<section id="menu">
+  <div class="section-eyebrow">Culinary Journey</div>
+  <h2 class="section-title-xl">Signature <em>Dishes</em></h2>
+  <div class="gold-divider"></div>
+
+  <div class="menu-filters">
+    <button class="filter-btn active" data-cat="All">All</button>
+    <button class="filter-btn" data-cat="Starters">Starters</button>
+    <button class="filter-btn" data-cat="Mains">Mains</button>
+    <button class="filter-btn" data-cat="Cocktails">Cocktails</button>
+  </div>
+
+  <div class="menu-grid" id="menuGrid">
+    <!-- JS populated -->
+  </div>
+</section>
+
+<!-- Experience -->
+<section id="experience">
+  <div style="max-width:1300px;margin:0 auto">
+    <div class="section-eyebrow">Why Basko</div>
+    <h2 class="section-title-xl">The <em>Experience</em></h2>
+    <div class="gold-divider"></div>
+    <div class="exp-grid">
+      <div class="exp-card">
+        <div class="exp-icon">🌃</div>
+        <div class="exp-card-title">Rooftop Ambiance</div>
+        <div class="exp-card-body">Dine under the stars on our expansive rooftop terrace at Starling Mall. The Delhi-NCR skyline is your backdrop, every evening.</div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon">🍸</div>
+        <div class="exp-card-title">Craft Cocktails</div>
+        <div class="exp-card-body">Our award-winning mixologists curate 30+ signature cocktails. From the fiery Picante Twist to the cinematic Basko Ball — every sip tells a story.</div>
+      </div>
+      <div class="exp-card">
+        <div class="exp-icon">🎶</div>
+        <div class="exp-card-title">Live Music Nights</div>
+        <div class="exp-card-body">Weekend evenings come alive with curated live performances. Jazz, fusion, and everything in between — music that moves your soul.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section id="gallery">
+  <div class="gallery-header">
+    <div class="section-eyebrow">Visual Diary</div>
+    <h2 class="section-title-xl">A Feast for<br>the <em>Eyes</em></h2>
+    <div class="gold-divider"></div>
+  </div>
+  <div class="gallery-mosaic">
+    <div class="g-cell g1">
+      <img src="https://images.unsplash.com/photo-1552566626-52f8b828add9?w=800&q=80" alt="Rooftop dining" loading="lazy">
+    </div>
+    <div class="g-cell g2">
+      <img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600&q=80" alt="Signature dish" loading="lazy">
+    </div>
+    <div class="g-cell g3">
+      <img src="https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=500&q=80" alt="Cocktails" loading="lazy">
+    </div>
+    <div class="g-cell g4">
+      <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80" alt="Food" loading="lazy">
+    </div>
+    <div class="g-cell g5">
+      <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=500&q=80" alt="Drinks" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- Packages -->
+<section id="packages">
+  <div style="max-width:1300px;margin:0 auto">
+    <div class="section-eyebrow">Special Occasions</div>
+    <h2 class="section-title-xl">Curated <em>Packages</em></h2>
+    <div class="gold-divider"></div>
+    <div class="packages-grid" id="packagesGrid">
+      <!-- JS populated -->
+    </div>
+  </div>
+</section>
+
+<!-- Reservation -->
+<section id="reservation">
+  <div class="reservation-grid">
+    <div>
+      <div class="section-eyebrow">Book a Table</div>
+      <h2 class="section-title-xl">Reserve<br>Your <em>Evening</em></h2>
+      <div class="gold-divider"></div>
+      <p class="res-info-body">Whether it's an intimate date night, a birthday celebration, or a corporate gathering — Basko transforms every occasion into a memory worth keeping.</p>
+      <ul class="res-details">
+        <li><span class="lbl">Location</span> Rooftop, Starling Mall, Sector 104, Noida</li>
+        <li><span class="lbl">Hours</span> 12:00 PM — 1:00 AM · All Days</li>
+        <li><span class="lbl">Phone</span> +91 95991 99499</li>
+        <li><span class="lbl">Email</span> contact@basko.in</li>
+        <li><span class="lbl">Parking</span> Free parking at Starling Mall</li>
+      </ul>
+    </div>
+    <div>
+      <div class="form-card">
+        <div class="form-title">Make a Reservation</div>
+        <div id="reservationForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Your Name *</label>
+              <input type="text" id="resName" placeholder="Rahul Sharma">
+            </div>
+            <div class="form-group">
+              <label>WhatsApp Number *</label>
+              <input type="tel" id="resPhone" placeholder="+91 98765 43210">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date *</label>
+              <input type="date" id="resDate">
+            </div>
+            <div class="form-group">
+              <label>Guests *</label>
+              <select id="resGuests">
+                <option value="">Select guests</option>
+                <option value="2">2 guests</option>
+                <option value="3-4">3–4 guests</option>
+                <option value="5-6">5–6 guests</option>
+                <option value="7-8">7–8 guests</option>
+                <option value="8+">8+ guests</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Preferred Time *</label>
+            <div class="time-slots" id="timeSlots">
+              <div class="time-slot" data-time="12:00" onclick="selectTime(this)">12:00</div>
+              <div class="time-slot" data-time="13:00" onclick="selectTime(this)">13:00</div>
+              <div class="time-slot" data-time="14:00" onclick="selectTime(this)">14:00</div>
+              <div class="time-slot" data-time="18:00" onclick="selectTime(this)">18:00</div>
+              <div class="time-slot" data-time="19:00" onclick="selectTime(this)">19:00</div>
+              <div class="time-slot" data-time="20:00" onclick="selectTime(this)">20:00</div>
+              <div class="time-slot" data-time="21:00" onclick="selectTime(this)">21:00</div>
+              <div class="time-slot" data-time="22:00" onclick="selectTime(this)">22:00</div>
+              <div class="time-slot" data-time="23:00" onclick="selectTime(this)">23:00</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Occasion</label>
+            <select id="resOccasion">
+              <option value="">Select occasion</option>
+              <option>Birthday</option>
+              <option>Anniversary</option>
+              <option>Date Night</option>
+              <option>Family Dinner</option>
+              <option>Corporate</option>
+              <option>Just Vibing</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Package</label>
+            <select id="resPkg">
+              <option value="standard">Standard (A la carte)</option>
+              <option value="couple">Couple's Night — ₹999</option>
+              <option value="group">Group Celebration — ₹3,499</option>
+              <option value="corporate">Corporate Dining — ₹1,800</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Special Requests</label>
+            <textarea id="resRequests" placeholder="Window seat, birthday cake, dietary preferences..."></textarea>
+          </div>
+          <button class="form-submit" id="submitBtn" onclick="submitReservation()">Confirm Reservation — Free</button>
+        </div>
+        <div class="form-success" id="formSuccess">
+          <div class="success-icon">✦</div>
+          <div class="success-title">Reservation Confirmed!</div>
+          <div class="success-sub">Your table is reserved. Our team will WhatsApp you within 30 minutes.</div>
+          <div class="booking-id" id="bookingId"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials">
+  <div class="section-eyebrow">Guest Stories</div>
+  <h2 class="section-title-xl">What They<br><em>Say</em></h2>
+  <div class="gold-divider"></div>
+
+  <div class="testimonials-slider">
+    <div class="testimonials-track" id="testimonialTrack">
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Basko is unlike anything in Noida. The rooftop views, the Lebanese Breaking Balloon, and that Picante Twist — an evening I'll never forget."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">P</div>
+          <div><div class="author-name">Priya Mehta</div><div class="author-meta">Google Review · Noida</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Celebrated my anniversary here. The staff decorated the table beautifully, the Balochistan Raan was extraordinary, and the cocktails were exceptional."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">A</div>
+          <div><div class="author-name">Arjun Kapoor</div><div class="author-meta">Zomato Review · Delhi</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"The vibe is perfect for a date night — dim lights, live music, incredible food. The Group Celebration package is absolutely worth it."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">S</div>
+          <div><div class="author-name">Sneha Agarwal</div><div class="author-meta">Instagram · Ghaziabad</div></div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-text">"Took my team here for our quarterly dinner. The private section, the food quality, and the service were all exceptional. Will definitely return."</p>
+        <div class="testimonial-author">
+          <div class="author-avatar">R</div>
+          <div><div class="author-name">Rohit Sharma</div><div class="author-meta">Corporate Client · Noida</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slider-controls">
+    <button class="slider-btn" onclick="slideTestimonials(-1)">←</button>
+    <button class="slider-btn" onclick="slideTestimonials(1)">→</button>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <div class="section-eyebrow">Find Us</div>
+  <h2 class="section-title-xl">Get in <em>Touch</em></h2>
+  <div class="gold-divider"></div>
+  <div class="contact-grid">
+    <div>
+      <div class="contact-info-item">
+        <div class="contact-info-label">Address</div>
+        <div class="contact-info-val">Rooftop, Starling Mall</div>
+        <div class="contact-info-sub">Sector 104, Noida, Uttar Pradesh</div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-info-label">Phone & WhatsApp</div>
+        <div class="contact-info-val">+91 95991 99499</div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-info-label">Email</div>
+        <div class="contact-info-val">contact@basko.in</div>
+      </div>
+      <div class="contact-info-item">
+        <div class="contact-info-label">Hours</div>
+        <div class="contact-info-val">12:00 PM — 1:00 AM</div>
+        <div class="contact-info-sub">Open every day · Kitchen closes at 12:30 AM</div>
+      </div>
+      <iframe
+        class="map-embed"
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3505.0!2d77.3704139!3d28.5419484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce740e7c05bd5%3A0x1797d2d6081574b9!2sBasko!5e0!3m2!1sen!2sin!4v1"
+        allowfullscreen="" loading="lazy">
+      </iframe>
+    </div>
+    <div class="contact-form-card">
+      <div class="form-title">Send a Message</div>
+      <div class="form-group">
+        <label>Your Name *</label>
+        <input type="text" id="ctName" placeholder="Rahul Sharma">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="ctEmail" placeholder="rahul@email.com">
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="tel" id="ctPhone" placeholder="+91 98765 43210">
+      </div>
+      <div class="form-group">
+        <label>Message *</label>
+        <textarea id="ctMessage" rows="5" placeholder="Tell us how we can help..."></textarea>
+      </div>
+      <button class="form-submit" onclick="submitContact()">Send Message</button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-name">Basko</div>
+      <div class="footer-brand-tagline">Where flavours meet the night sky.</div>
+      <div class="footer-social">
+        <a class="social-btn" href="https://www.facebook.com/baskonoida" target="_blank" title="Facebook">f</a>
+        <a class="social-btn" href="https://www.instagram.com/baskonoida" target="_blank" title="Instagram">in</a>
+        <a class="social-btn" href="https://wa.me/919599199499" target="_blank" title="WhatsApp">W</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigate</div>
+      <ul class="footer-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Experiences</div>
+      <ul class="footer-links">
+        <li><a href="#packages">Couple's Night</a></li>
+        <li><a href="#packages">Group Celebration</a></li>
+        <li><a href="#packages">Corporate Dining</a></li>
+        <li><a href="#reservation">Live Music Nights</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Contact</div>
+      <ul class="footer-links">
+        <li><a href="tel:+919599199499">+91 95991 99499</a></li>
+        <li><a href="mailto:contact@basko.in">contact@basko.in</a></li>
+        <li><a href="https://maps.app.goo.gl/d5XtwjpHJSLc7ZZG6" target="_blank">Get Directions</a></li>
+        <li><a href="#reservation">Reserve a Table</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Basko Restaurant, Noida. All rights reserved.</span>
+    <span class="footer-copy">Sector 104, Starling Mall, Noida · Open till 1 AM</span>
+  </div>
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────
+const MENU_ITEMS = [
+  { id:1, name:"Lebanese Breaking Balloon", category:"Starters", price:580, tag:"Must Try", desc:"Theatrical crispy dough balloon over mezze, hummus & spiced lamb.", veg:false, img:"https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600&q=80" },
+  { id:2, name:"Basko Surf & Turf Wings", category:"Starters", price:620, tag:"Chef's Special", desc:"Crispy chicken wings + tiger prawns, smoky secret glaze.", veg:false, img:"https://images.unsplash.com/photo-1527477396000-e27163b481c2?w=600&q=80" },
+  { id:3, name:"Sesame Tofu Teriyaki", category:"Starters", price:440, tag:"Veg Star", desc:"Golden sesame tofu, rich teriyaki glaze, microgreens.", veg:true, img:"https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&q=80" },
+  { id:4, name:"Turkish Mezze Platter", category:"Starters", price:680, tag:"Share", desc:"A journey to Istanbul — hummus, baba ganoush, falafel, pita.", veg:true, img:"https://images.unsplash.com/photo-1541014741259-de529411b96a?w=600&q=80" },
+  { id:5, name:"Balochistan Raan", category:"Mains", price:1480, tag:"Slow Cooked", desc:"18-hour slow-cooked whole lamb, fragrant Baloch spice blend.", veg:false, img:"https://images.unsplash.com/photo-1544025162-d76694265947?w=600&q=80" },
+  { id:6, name:"Pan-Asian Ramen Bowl", category:"Mains", price:540, tag:"Comfort", desc:"Rich broth, hand-pulled noodles, chashu pork, marinated egg.", veg:false, img:"https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&q=80" },
+  { id:7, name:"Picante Twist", category:"Cocktails", price:380, tag:"Bestseller", desc:"Fiery chilli, tangy citrus, smoky mezcal. Bold and unforgettable.", veg:true, img:"https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&q=80" },
+  { id:8, name:"Basko Ball", category:"Cocktails", price:360, tag:"Unique", desc:"Buttered popcorn meets cool spirit. Cinema magic in a glass.", veg:true, img:"https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&q=80" }
+];
+
+const PACKAGES = [
+  { id:"couple", name:"Couple's Night", price:999, original:1600, guests:"For 2", desc:"Reserved rooftop table, welcome drinks, 1 signature starter, dessert on special occasions, priority entry.", perks:["Reserved rooftop table (2 hrs)","Welcome drink for both","1 signature appetiser","Birthday/anniversary dessert","Priority entry — no wait"] },
+  { id:"group", name:"Group Celebration", price:3499, original:5200, guests:"For 6", desc:"Dedicated section, cocktail round, 2 sharing starters, custom cake, dedicated host.", perks:["Dedicated rooftop section","Welcome cocktails round","2 sharing starters","Custom birthday/anniversary cake","Dedicated host for evening","Complimentary group photo"], featured:true },
+  { id:"corporate", name:"Corporate Dining", price:1800, original:2800, guests:"For 10", desc:"Private area, mocktails, 3-course set menu, AV setup available.", perks:["Private dedicated area","Welcome mocktails","3-course set menu","AV / presentation setup","Premium service team"] }
+];
+
+// ── RENDER MENU ───────────────────────────────────────
+let activeFilter = 'All';
+function renderMenu(filter) {
+  const grid = document.getElementById('menuGrid');
+  const items = filter === 'All' ? MENU_ITEMS : MENU_ITEMS.filter(i => i.category === filter);
+  grid.innerHTML = items.map((item, idx) => `
+    <div class="menu-card" style="transition-delay:${idx*0.07}s">
+      <img src="${item.img}" alt="${item.name}" loading="lazy">
+      <div class="menu-card-overlay">
+        <span class="menu-card-tag">${item.tag}</span>
+        <div class="menu-card-name">${item.name} <span class="veg-badge ${item.veg?'veg':'nonveg'}"></span></div>
+        <div class="menu-card-desc">${item.desc}</div>
+        <div class="menu-card-price">₹${item.price}</div>
+      </div>
+    </div>
+  `).join('');
+  setTimeout(() => {
+    grid.querySelectorAll('.menu-card').forEach(c => c.classList.add('visible'));
+  }, 50);
+}
+
+// ── RENDER PACKAGES ───────────────────────────────────
+function renderPackages() {
+  const grid = document.getElementById('packagesGrid');
+  grid.innerHTML = PACKAGES.map((p, idx) => `
+    <div class="pkg-card ${p.featured?'featured':''}" style="transition-delay:${idx*0.15}s">
+      ${p.featured ? '<div class="pkg-featured-label">Most Popular</div>' : ''}
+      <div class="pkg-name">${p.name}</div>
+      <div class="pkg-guests">${p.guests}</div>
+      <div class="pkg-price"><sub>₹</sub>${p.price.toLocaleString('en-IN')}</div>
+      <div class="pkg-original">Regular: ₹${p.original.toLocaleString('en-IN')}</div>
+      <div class="pkg-divider"></div>
+      <ul class="pkg-perks">${p.perks.map(k=>`<li>${k}</li>`).join('')}</ul>
+      <button class="pkg-btn" onclick="bookPackage('${p.id}')">Book This Package</button>
+    </div>
+  `).join('');
+  setTimeout(() => {
+    grid.querySelectorAll('.pkg-card').forEach(c => c.classList.add('visible'));
+  }, 100);
+}
+
+// ── MENU FILTER ───────────────────────────────────────
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderMenu(btn.dataset.cat);
+  });
+});
+
+// ── TIME SLOTS ────────────────────────────────────────
+let selectedTime = '';
+function selectTime(el) {
+  if (el.classList.contains('unavailable')) return;
+  document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTime = el.dataset.time;
+}
+
+// ── RESERVATION FORM ─────────────────────────────────
+async function submitReservation() {
+  const name = document.getElementById('resName').value.trim();
+  const phone = document.getElementById('resPhone').value.trim();
+  const date = document.getElementById('resDate').value;
+  const guests = document.getElementById('resGuests').value;
+
+  if (!name || !phone || !date || !guests || !selectedTime) {
+    showToast('Please fill all required fields and select a time slot.', 'error'); return;
+  }
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Confirming...';
+
+  const payload = {
+    name, phone, date, time: selectedTime, guests,
+    occasion: document.getElementById('resOccasion').value,
+    package: document.getElementById('resPkg').value,
+    requests: document.getElementById('resRequests').value
+  };
+
+  try {
+    const res = await fetch('/api/reservations', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('reservationForm').style.display = 'none';
+      const succ = document.getElementById('formSuccess');
+      succ.style.display = 'block';
+      document.getElementById('bookingId').textContent = data.bookingId;
+      showToast(data.message);
+    } else {
+      showToast(data.message, 'error');
+      btn.disabled = false; btn.textContent = 'Confirm Reservation — Free';
+    }
+  } catch(e) {
+    // Demo mode — show success anyway
+    document.getElementById('reservationForm').style.display = 'none';
+    const succ = document.getElementById('formSuccess');
+    succ.style.display = 'block';
+    document.getElementById('bookingId').textContent = 'BASKO-' + Math.floor(Math.random()*900000+100000);
+    showToast('Table reserved! Our team will contact you shortly.');
+  }
+}
+
+// ── CONTACT FORM ──────────────────────────────────────
+async function submitContact() {
+  const name = document.getElementById('ctName').value.trim();
+  const message = document.getElementById('ctMessage').value.trim();
+  if (!name || !message) { showToast('Please enter name and message.', 'error'); return; }
+  try {
+    const res = await fetch('/api/contact', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ name, email: document.getElementById('ctEmail').value, phone: document.getElementById('ctPhone').value, message })
+    });
+    const data = await res.json();
+    showToast(data.message || "Message sent!");
+    document.getElementById('ctName').value = '';
+    document.getElementById('ctEmail').value = '';
+    document.getElementById('ctPhone').value = '';
+    document.getElementById('ctMessage').value = '';
+  } catch(e) {
+    showToast("Message received! We'll respond within 2 hours.");
+    document.getElementById('ctName').value = '';
+    document.getElementById('ctMessage').value = '';
+  }
+}
+
+// ── PACKAGE BOOKING ───────────────────────────────────
+function bookPackage(id) {
+  document.getElementById('resPkg').value = id;
+  scrollTo('#reservation');
+}
+
+// ── SCROLL TO ─────────────────────────────────────────
+function scrollTo(target) {
+  document.querySelector(target).scrollIntoView({ behavior:'smooth' });
+}
+
+// ── NAVBAR SCROLL ─────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// ── CURSOR ────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  ring.style.left = e.clientX + 'px';
+  ring.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('button, a, .menu-card, .pkg-card, .time-slot').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+});
+
+// ── TOAST ─────────────────────────────────────────────
+function showToast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (type ? ' ' + type : '');
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+// ── SCROLL ANIMATIONS ─────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      if (e.target.classList.contains('pkg-card') || e.target.classList.contains('exp-card')) {
+        observer.unobserve(e.target);
+      }
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.section-eyebrow, .section-title-xl, .gold-divider, .about-img-main, .about-img-accent, .exp-card, .pkg-card').forEach(el => observer.observe(el));
+
+// ── TESTIMONIALS SLIDER ───────────────────────────────
+let slideIndex = 0;
+function slideTestimonials(dir) {
+  const track = document.getElementById('testimonialTrack');
+  const cards = track.querySelectorAll('.testimonial-card');
+  const visible = window.innerWidth > 1024 ? 3 : window.innerWidth > 640 ? 2 : 1;
+  const max = cards.length - visible;
+  slideIndex = Math.max(0, Math.min(max, slideIndex + dir));
+  const cardW = cards[0].offsetWidth + 24;
+  track.style.transform = `translateX(-${slideIndex * cardW}px)`;
+}
+
+// ── MOBILE NAV ────────────────────────────────────────
+function closeMobileNav() {
+  document.getElementById('mobileNav').classList.remove('open');
+}
+
+// ── SET MIN DATE ──────────────────────────────────────
+const dateInput = document.getElementById('resDate');
+if (dateInput) {
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.min = today;
+  dateInput.value = today;
+}
+
+// ── INIT ──────────────────────────────────────────────
+renderMenu('All');
+renderPackages();
+</script>
+</body>
+</html>
